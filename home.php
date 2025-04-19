@@ -2,7 +2,6 @@
 <html lang="en">
 
 <?php 
-require('check_sess.php');
 require("db/conn.php");
     require('head.php');
     require('fb_time_ago.php');
@@ -60,15 +59,7 @@ require("db/conn.php");
   <!-- BODY CONTENT -->
   <main id="main" class="toggle-sidebar">
 
-    <div class="pagetitle">
-      <h1>List of Trainees</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="home.php">Home</a></li>
-          <li class="breadcrumb-item active">List</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
+    
 
     <!-- Toast with Placements -->
 <div class="position-fixed top-1 end-0" style="z-index: 11" data-bs-autohide="false">
@@ -130,8 +121,16 @@ require("db/conn.php");
           </div>
     
               <!-- LOADING KEMERUT -->
-
-
+    <!-- Start Page Title -->
+    <div class="pagetitle">
+      <h1>Project Dashboard</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
+          <li class="breadcrumb-item active">Project</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
     <section class="section home">
       <div class="row">
 
@@ -142,87 +141,62 @@ require("db/conn.php");
           <div class="card">
             <div class="card-body">
               
-              <h5 class="card-title">Overall Trainees</h5>
-              <p>Listed below are trainees in different RTCs that are under monitoring and/or Academic Board.</p>
+              <h4 class="card-title ">OVERALL PROJECTS</h4>
+              <p>Listed below are the Projects and its details.</p>
 
               <!-- Table with stripped rows -->
 
-             
+              <!-- <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+              </div> -->
               <table class="table datatable">
                 <thead>
                   <tr>
-                    <th>Rank</th>
-                    <th>Full Name</th>
-                    <th>Age</th>
-                    <th>Case</th>
-                    <th>RTC</th>
-                    <th>Update</th>
-                    <th>Action</th>
+                    <th>Project Name</th>
+                    <th>Budget</th>
+                    <th>Description</th>
+                    <th>Team Leader</th>
+                    <th>Timeline (%)</th>
+                    <th>Date Added</th>
+                    <!-- <th>Date Start/ed</th>
+                    <th>Date End</th> -->
                   </tr>
                 </thead>
                 <tbody>
                   <?php 
 
                   //echo $db;
-                    $get_trainees = mysqli_query($db,"select * from list WHERE is_terminated IS NULL AND nature_termi != 0");
-                            if(mysqli_num_rows($get_trainees)>= 1){ 
-                              //echo "<h1>Meron</h1>";
-                              $age = "??";
-                              while($rows2=mysqli_fetch_array($get_trainees)){
-                                $date_filed = date("d-M-Y H:i", strtotime($rows2['date']));
-                                if($rows2['age'] == ''){
-
-                                }
-                                else {
-                                  $age = $rows2['age'];
-                                }
+                    $get_project = mysqli_query($db,"select * from project WHERE is_finished != 1");
+                            if(mysqli_num_rows($get_project)>= 1){ 
+                              while($rows2 = mysqli_fetch_assoc($get_project)){
+                                $timeline = $rows2['timeline'];
                               ?>
                       <tr>
-                        <td><?=$rows2['rank']?></td>
-                        <td><a href="tprofile.php?id=<?=$rows2['id']?>"><?=$rows2['fullname']?></a></td>
-                        <td><?=$age?></td>
+                      <td><a href="tprofile.php?id=<?=$rows2['id']?>"><?=$rows2['name']?></a></td>
+                        <td>₱<?=number_format($rows2['budget'])?></td>
+                        <td><?=$rows2['description']?></td>
+                        
                         <?php 
-                        $x4 = "";
-                          $status = mysqli_query($db,"select * from hatol WHERE id=$rows2[nature_termi]");
-                          if($status){
+                        $team_leader = "No User Found";
+                          $status = mysqli_query($db,"select fullname from users WHERE id=$rows2[teamleader_id]");
+                          if(mysqli_num_rows($status) >= 1){
                             $result4 = $status->fetch_assoc(); 
-                            $x4 = $result4['stat'];
+                            $team_leader = $result4['stat'];
                           }
                           else {
-                            $x4 = $rows2['nature_termi'];
+                            $team_leader = "No User Found";
                           } 
                           
-
                         ?>
-                        <td><?=$x4?> (<?=facebook_time_ago($date_filed)?>)</td>
-                        <?php 
-                          $query2 = mysqli_query($db,"select * from rtc WHERE id=$rows2[rtc]");
-                          $result3 = $query2->fetch_assoc();  
-                          $x3 = $result3['rtc_short'];
-                        ?>
-                        <td><a href="thrurtc.php?rtc=<?=$result3['id']?>&r=<?=$x3?>"><?=$x3?></a></td>
+                        <td><?=$team_leader?></td>
                         <td>
-                            <select class="form-select" id="aa<?=$rows2['id']?>" name="aa<?=$rows2['id']?>" required>
-                            <?php 
-                            $get_hatol = mysqli_query($db,"select * from hatol");
-                              if(mysqli_num_rows($get_hatol)>= 1){ 
-                                $selected = "";
-                              while($hatol=mysqli_fetch_array($get_hatol)){
-                                if($rows2['nature_termi'] == $hatol['id']){
-                                    $selected = "selected";
-                                }
-
-                                ?>
-
-                                  <option value="<?=$hatol['id']?>" <?=$selected?>><?=$hatol['stat']?></option>
-                              <?php 
-                                $selected = "";
-                                }
-                              }
-                              ?>
-                            </select>
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: <?=$timeline?>%;" aria-valuenow="<?=$timeline?>" aria-valuemin="0" aria-valuemax="100"><?=$timeline?>%</div>
+          </div>
                         </td>
-                        <td><button name="<?=$rows2['id']?>" id="<?=$rows2['id']?>" value="<?=$rows2['id']?>" class="opns bi bi-pencil btn btn-info"></button></td>
+                        <td><?=facebook_time_ago($rows2['date'])?></td>
+                        <!-- <td><?=$rows2['date_started']?></td>
+                        <td><?=$rows2['date_end']?></td> -->
                       </tr>
                   <?php
                         }
@@ -241,6 +215,7 @@ require("db/conn.php");
             </div>
           </div>
 
+         <!-- UPCOMING PROJECTS TABLE HERE... -->
         </div>
       </div>
     </section>

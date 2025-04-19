@@ -1,5 +1,4 @@
 <?php 
-require('check_sess.php');
 require("db/conn.php");
   ?>
 
@@ -10,7 +9,7 @@ require("db/conn.php");
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Add Trainee</title>
+  <title>Add Employee</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -63,10 +62,10 @@ require("db/conn.php");
           //Value of Trainee ID is x
           //Value of Case Status is y
           //alert('value is of TID '+x+' // Value of Case is '+y);
-      if($('#fullname').val() == "" && $('#fullname').val().length <5){
+      if($('#name').val() == "" && $('#description').val().length <5){
         var sel2 = $(".toast-body");
             sel2.empty();
-            sel2.append("<p class='alert alert-danger'>Full Name Must Not Be Empty or Less than 5 Characters.</p>");
+            sel2.append("<p class='alert alert-danger'>Project Title or Description Must Not Be Empty or Less than 5 Characters.</p>");
               $('.toast').toast('show');
       }
       else {
@@ -74,28 +73,20 @@ require("db/conn.php");
       //return;
           if (confirm("Detail Confirmation: "+$('#rank').val()+" "+$('#fullname').val()+" ?") == true) {
             $('.modal').show();
-            var rank = $('#rank').val();
-              var fullname = $('#fullname').val();
-              var age = $('#age').val();
-              var class_id = $('#class_id').val();
-              var nature_termi = $('#nature_termi').val();
-              var rtc_id = $('#rtc_id').val();
-              var acadsess = $('#acadsess').val();
-              var reso = $('#reso').val();
-              var so = $('#so').val();
-              var remarks = $('#remarks').val();
+              var name = $('#name').val();
+              var description = $('#description').val();
+              var budget = $('#budget').val();
+              var teamleader = $('#teamleader').val();
+              var date_started = $('#date_start').val();
+              var date_end = $('#date_end').val();
               
              var formData = {
-                  rank_ : rank,
-                  fullname_ : fullname,
-                  age_ : age,
-                  class_id_ : class_id,
-                  nature_termi_ : nature_termi,
-                  rtc_id_ : rtc_id,
-                  acadsess_ : acadsess,
-                  reso_ : reso,
-                  so_ : so,
-                  remarks_ : remarks
+                  name_ : name,
+                  description_ : description,
+                  budget_ : budget,
+                  teamleader_ : teamleader,
+                  date_started_ : date_started,
+                  date_end_ : date_end
                 };
                 /*alert("til dito");
               return;*/
@@ -135,12 +126,12 @@ require("db/conn.php");
       <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
         <div class="container">
           <div class="row justify-content-center">
-            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+            <div class="col-lg-12 col-md-12 d-flex flex-column align-items-center justify-content-center">
 
               <div class="d-flex justify-content-center py-4">
                 <a href="home.php" class="logo d-flex align-items-center w-auto">
-                  <img src="assets/img/logo.png" alt="">
-                  <span class="d-none d-lg-block">CGETDC Admin</span>
+                  <!-- <img src="assets/img/logo.png" alt=""> -->
+                  <span class="d-none d-lg-block">🔙 Dashboard</span>
                 </a>
               </div><!-- End Logo -->
 
@@ -205,69 +196,57 @@ require("db/conn.php");
     
               <!-- Toast with Placements -->
 
-              <div class="card mb-3">
+              <div class="card mb-12">
 
                 <div class="card-body">
 
                   <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4">Add Trainee</h5>
-                    <p class="text-center small">Trainees' Details</p>
+                    <h5 class="card-title text-center pb-0 fs-4">Add Project</h5>
+                    <p class="text-center small">Input all Project's Details</p>
                   </div>
 
                   <form class="row g-3 needs-validation" novalidate>
                     
-                    <div class="col-12">
-                      <label for="validationDefault04" class="form-label">Trainees' Rank</label>
-                      <select class="form-select" name="rank" id="rank" required>
-                        <option value="CCGNO" selected >CCGNO</option>
-                        <option value="CCGO">CCGO</option>
-                        <option value="CGSO">CGSO</option>
-                        <option value="CG P/ENS">CG P/ENS</option>
-                      </select>
-                    </div>
+                    
 
                     <div class="col-12">
-                      <label for="yourName" class="form-label">Trainee's Full Name</label>
-                      <input type="text" name="fullname" class="form-control" id="fullname" placeholder="First Name M.I Lastname" required>
-                      <div class="invalid-feedback">Please, enter Name!</div>
+                      <label for="yourName" class="form-label">Project Title</label>
+                      <input type="text" name="name" class="form-control" id="name" placeholder="Project Title..." required>
+                      <div class="invalid-feedback">Please, enter Title!</div>
                     </div>
 
+                    
+
                     <div class="col-12">
-                      <label for="yourName" class="form-label">Trainee's Remarks</label>
-                      <textarea name="remarks" class="form-control" id="remarks" placeholder="Insert Remarks..."></textarea>
+                      <label for="yourName" class="form-label">Project Description</label>
+                      <textarea name="description" class="form-control" id="description" placeholder="Project Description..."></textarea>
                       <!-- <input type="text" name="remarks" class="form-control" id="remarks" placeholder="Remarks" required> -->
-                      <div class="invalid-feedback">Please, Enter Remarks</div>
+                      <div class="invalid-feedback">Please, Enter Description</div>
                     </div>
 
                     <div class="col-12">
-                      <label for="yourName" class="form-label">Age</label>
-                      <input type="number" name="age" class="form-control" id="age" placeholder="Age...">
-                      <div class="invalid-feedback">Please, enter Age!</div>
+                      <label for="yourName" class="form-label">Project Budget</label>
+                      <input type="number" name="budget" class="form-control" id="budget" placeholder="Project Budget...">
+                      <div class="invalid-feedback">Please, enter Budget!</div>
                     </div>
 
                     <div class="col-12">
-                      <label for="yourName" class="form-label">Acad Session</label>
-                      <input type="number" name="age" class="form-control" id="acadsess" placeholder="Insert # of session">
-                      <div class="invalid-feedback">Please, enter Acad Session!</div>
-                    </div>
-
-                    <div class="col-12">
-                      <label for="validationDefault04" class="form-label">Resolution</label>
-                      <select class="form-select" name="reso" id="reso" required>
-                        <option value="0">No Reso Yet.</option>
+                      <label for="validationDefault04" class="form-label">Select Team Leader</label>
+                      <select class="form-select" name="teamleader" id="teamleader" required>
+                        <option value="0" disabled selected>Select Team Leader</option>
                         <?php 
-                    $get_trainees = mysqli_query($db,"select * FROM resolution");
+                    $get_trainees = mysqli_query($db,"select * FROM users");
                             if(mysqli_num_rows($get_trainees)>= 1){ 
                               while($rows2=mysqli_fetch_array($get_trainees)){
                               ?>
-                        <option value="<?=$rows2['id']?>"><?=$rows2['orig_name']?></option>
+                        <option value="<?=$rows2['id']?>"><?=$rows2['fullname']?></option>
                       
                   <?php
                         }
                       }
                       else { ?>
                         
-                        <option><b>No Entries Found</b></option>
+                        <option disabled><b>No User Found</b></option>
                       
                       <?php  
                       }
@@ -275,99 +254,23 @@ require("db/conn.php");
                       </select>
                     </div>
 
-                    <div class="col-12">
-                      <label for="validationDefault04" class="form-label">Special Order</label>
-                      <select class="form-select" name="so" id="so" required>
-                        <option value="0">No S.O Yet.</option>
-                        <?php 
-                    $get_trainees = mysqli_query($db,"select * FROM orders");
-                            if(mysqli_num_rows($get_trainees)>= 1){ 
-                              while($rows2=mysqli_fetch_array($get_trainees)){
-                              ?>
-                        <option value="<?=$rows2['id']?>"><?=$rows2['orig_name']?></option>
-                      
-                  <?php
-                        }
-                      }
-                      else { ?>
-                        
-                        <option><b>No Entries Found</b></option>
-                      
-                      <?php  
-                      }
-                  ?>
-                      </select>
+
+                    <!-- <div class="col-12">
+                      <label for="yourName" class="form-label">Date Start</label>
+                      <input type="date" name="date_started" class="form-control" id="date_started" placeholder="Project Budget...">
+                      <div class="invalid-feedback">Please, enter Budget!</div>
                     </div>
 
                     <div class="col-12">
-                      <label for="validationDefault04" class="form-label">Class</label>
-                      <select class="form-select" name="class" id="class_id" required>
-                        <?php 
-                    $get_trainees = mysqli_query($db,"select * FROM rtc_class WHERE is_active='Y' ORDER BY rtc_id ASC");
-                            if(mysqli_num_rows($get_trainees)>= 1){ 
-                              while($rows2=mysqli_fetch_array($get_trainees)){
-                              ?>
-                        <option value="<?=$rows2['id']?>"><?=$rows2['class_name']?></option>
-                      
-                  <?php
-                        }
-                      }
-                      else { ?>
-                        
-                        <option><b>No Entries Found</b></option>
-                      
-                      <?php  
-                      }
-                  ?>
-                      </select>
-                    </div>
+                      <label for="yourName" class="form-label">Date End</label>
+                      <input type="date" name="date_end" class="form-control" id="date_end" placeholder="Project Budget...">
+                      <div class="invalid-feedback">Please, enter Budget!</div>
+                    </div> -->
 
-                    <div class="col-12">
-                      <label for="validationDefault04" class="form-label">Nature of Termination</label>
-                      <select name="nature_termi" class="form-select" id="nature_termi" required>
-                        <?php 
-                    $get_trainees = mysqli_query($db,"select * FROM hatol");
-                            if(mysqli_num_rows($get_trainees)>= 1){ 
-                              while($rows2=mysqli_fetch_array($get_trainees)){
-                                
-                              ?>
-                        <option value="<?=$rows2['id']?>"><?=$rows2['stat']?></option>
-                      
-                  <?php
-                        }
-                      }
-                      else { ?>
-                        
-                        <option><b>No Entries Found</b></option>
-                      
-                      <?php  
-                      }
-                  ?>
-                      </select>
-                    </div>
 
-                    <div class="col-12">
-                      <label for="validationDefault04" class="form-label">RTC</label>
-                      <select class="form-select" id="rtc_id" required>
-                        <?php 
-                    $get_trainees2 = mysqli_query($db,"select * FROM rtc");
-                            if(mysqli_num_rows($get_trainees2)>= 1){ 
-                              while($rows2=mysqli_fetch_array($get_trainees2)){
-                              ?>
-                        <option value="<?=$rows2['id']?>"><?=$rows2['rtc_name']?></option>
-                      
-                  <?php
-                        }
-                      }
-                      else { ?>
-                        
-                        <option><b>No Entries Found</b></option>
-                      
-                      <?php  
-                      }
-                  ?>
-                      </select>
-                    </div>
+                    
+
+                    
                     <div class="form-check">
                       <input class="form-check-input" type="checkbox" value="" id="verify validationDefault04" onclick="$('#bookit').attr('disabled', !$(this).is(':checked'));" required>
                       <label class="form-check-label" for="flexCheckChecked">
@@ -387,14 +290,7 @@ require("db/conn.php");
                 </div>
               </div>
 
-              <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                Powered by <a href="https://www.facebook.com/PCGMentors">CGETDC / PCG Mentors</a>
-              </div>
-
+             
             </div>
           </div>
         </div>

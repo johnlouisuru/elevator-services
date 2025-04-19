@@ -1,0 +1,76 @@
+ <!-- Upoming Projects -->
+          <div class="card">
+            <div class="card-body">
+              
+              <h4 class="card-title ">UPCOMING PROJECTS</h4>
+              <p>Listed below are the Upcoming Projects and its details.</p>
+
+              <!-- Table with stripped rows -->
+
+              <!-- <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+              </div> -->
+              <table class="table datatable">
+                <thead>
+                  <tr>
+                    <th>Project Name</th>
+                    <th>Budget</th>
+                    <th>Description</th>
+                    <th>Team Leader</th>
+                    <th>Timeline (%)</th>
+                    <!-- <th>Date Start/ed</th>
+                    <th>Date End</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php 
+
+                  //echo $db;
+                    $get_project = mysqli_query($db,"select * from project WHERE date_started > CURRENT_DATE()");
+                            if(mysqli_num_rows($get_project)>= 1){ 
+                              while($rows2 = mysqli_fetch_assoc($get_project)){
+                                $timeline = $rows2['timeline'];
+                              ?>
+                      <tr>
+                        <td><a href="tprofile.php?id=<?=$rows2['id']?>"><?=$rows2['name']?></a></td>
+                        <td>₱<?=number_format($rows2['budget'])?></td>
+                        <td><?=$rows2['description']?></td>
+                        
+                        <?php 
+                        $team_leader = "No User Found";
+                          $status = mysqli_query($db,"select fullname from users WHERE id=$rows2[teamleader_id]");
+                          if(mysqli_num_rows($status) >= 1){
+                            $result4 = $status->fetch_assoc(); 
+                            $team_leader = $result4['stat'];
+                          }
+                          else {
+                            $team_leader = "No User Found";
+                          } 
+                          
+                        ?>
+                        <td><?=$team_leader?></td>
+                        <td>
+             <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: <?=$timeline?>%;" aria-valuenow="<?=$timeline?>" aria-valuemin="0" aria-valuemax="100"><?=$timeline?>%</div>
+              </div>
+                        </td>
+                        <!-- <td><?=$rows2['date_started']?></td>
+                        <td><?=$rows2['date_end']?></td> -->
+                      </tr>
+                  <?php
+                        }
+                      }
+                      else { ?>
+                        <tr>
+                        <td colspan="7"><center><b>No Entries Found</b></center></td>
+                      </tr>
+                      <?php  
+                      }
+                  ?>
+                </tbody>
+              </table>
+              <!-- End Table with stripped rows -->
+
+            </div>
+          </div>
+          <!-- END Upoming Projects -->

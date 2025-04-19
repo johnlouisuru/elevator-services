@@ -5,7 +5,7 @@
 date_default_timezone_set('Asia/Manila');
 session_start(); */
 //C,{WkK^DzBa{
-$db = new mysqli("localhost","root","","trainees");
+$db = new mysqli("localhost","root","","chad");
 date_default_timezone_set('Asia/Manila');
 //session_start();
 //echo hash('sha256', '12345');
