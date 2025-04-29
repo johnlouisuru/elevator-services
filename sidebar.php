@@ -35,15 +35,24 @@
           <span class="bi bi-plus">Add User</span>  
         </a>
       </li><!-- End Register Page Nav -->
-      
-      
+
       <li class="nav-item">
+        <a class="nav-link collapsed" href="register_position.php">
+          <i class="bi bi-gear"></i></i>
+
+          <span class="bi bi-plus">Add Position</span>  
+        </a>
+      </li><!-- End Register Page Nav -->
+      
+      
+      <!-- <li class="nav-item">
         <a class="nav-link collapsed" href="register_case.php">
           <i class="bi bi-folder-fill"></i>
 
           <span class="bi bi-plus">Upload File</span>  
         </a>
-      </li><!-- End Register Page Nav -->
+      </li> -->
+      <!-- End Register Page Nav -->
       <!-- <li class="nav-heading">Special Orders</li>
       <li class="nav-item">
         <a class="nav-link collapsed" href="upload.php">

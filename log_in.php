@@ -5,6 +5,12 @@
 <?php 
 //require('check_sess.php');
 require("db/conn.php");
+session_start();
+if (isset($_SESSION['user_id'])) {
+    // User is not logged in, redirect to login page
+    header('Location: home.php');
+    exit();
+}
     require('head.php');
     require('fb_time_ago.php');
   ?>
@@ -14,7 +20,7 @@ require("db/conn.php");
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>TRAINEES TRACKER SYSTEM</title>
+    <title>CHAD ELEVATOR SYSTEM</title>
 
     <!-- Custom fonts for this template-->
 
@@ -55,14 +61,14 @@ require("db/conn.php");
                         <!-- Nested Row within Card Body -->
                         <div class="row">
 						
-						<img src='assets/img/cgetdc.jpg' class='col-lg-6 d-lg-block'>
+						<img src='assets/img/chad.png' class='col-lg-6 d-lg-block'>
                             <!--<div class="col-lg-6 d-none d-lg-block bg-login-image"></div>-->
                             <div class="col-lg-6">
 							
                                 <div class="p-5">
 
                                     <div class="text-center">
-										<h1 class="h3 mb-0 text-center text-gray-800">TRAINEES' STATUS MONITORING SYSTEM</h1>
+										<h1 class="h3 mb-0 text-center text-gray-800">CHAD ELEVATOR SYSTEM</h1>
 										<hr />
 										
                                     </div>
@@ -88,7 +94,13 @@ require("db/conn.php");
 										-->
                                     </form>
                                     <hr>
-                                    <div class="text-center">
+                                    <?php 
+
+                                        if(@$_SESSION['error']){
+                                            echo '<p class="text text-bg-danger text-center">'.$_SESSION['error'].'</p>';
+                                        }
+                                    ?>
+                                    <!-- <div class="text-center">
                                         <a href="../attendance/Lecture/takeAttendance.php"><i class="bi bi-person-bounding-box"> &nbsp Login Using Face Recognition</i></a>
                                     </div>
                                     <div class="text-center">
@@ -96,12 +108,12 @@ require("db/conn.php");
                                     </div>
                                     <div class="text-center">
                                         <a  href="#"><i class="bi bi-person-plus"></i> Create an Account!</a>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <h5 class="small">&nbsp Ver 1.0.0</h5>
+                    
                 </div>
 
             </div>

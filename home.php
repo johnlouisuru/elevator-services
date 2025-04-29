@@ -2,6 +2,16 @@
 <html lang="en">
 
 <?php 
+
+session_start();
+
+// Check if the user is logged in
+if(!isset($_SESSION['user_id'])) {
+    // User is not logged in, redirect to login page
+    header('Location: log_in.php');
+    exit();
+}
+
 require("db/conn.php");
     require('head.php');
     require('fb_time_ago.php');
@@ -9,41 +19,7 @@ require("db/conn.php");
   ?>
 <head>
   <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
-  <script>
-    $(document).ready(function() {
-
-     $('.opns').on("click", function() {
-      $('.modal').show();
-          var x = $(this).val();
-          var y = $('#aa'+x).val();
-          
-         var formData = {
-              tid : x,
-              cid : y
-            };
-
-          $.ajax({
-              type: "POST",
-              url: "update_trainee_case_status.php",
-              data: formData,
-              dataType: "json",
-              encode: true,
-            }).done(function(data) {
-              $('.modal').hide();
-              var sel2 = $(".toast-body");
-              sel2.empty();
-              sel2.append(data['message']);
-              $('.toast').toast('show');
-              
-            });
-/*alert('heto');
-          return;*/
-             event.preventDefault();
-     });
-     
-     
-    });
-  </script>
+ 
 </head>
 <body>
 
@@ -149,12 +125,13 @@ require("db/conn.php");
               <!-- <div class="progress">
                 <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
               </div> -->
+              <div class="table-responsive">
               <table class="table datatable">
                 <thead>
                   <tr>
                     <th>Project Name</th>
                     <th>Budget</th>
-                    <th>Description</th>
+                    <!-- <th>Description</th> -->
                     <th>Team Leader</th>
                     <th>Timeline (%)</th>
                     <th>Date Added</th>
@@ -172,29 +149,45 @@ require("db/conn.php");
                                 $timeline = $rows2['timeline'];
                               ?>
                       <tr>
-                      <td><a href="tprofile.php?id=<?=$rows2['id']?>"><?=$rows2['name']?></a></td>
-                        <td>₱<?=number_format($rows2['budget'])?></td>
-                        <td><?=$rows2['description']?></td>
-                        
-                        <?php 
+                      <td><a href="project.php?id=<?=$rows2['id']?>&p=<?=$rows2['name']?>"><?=$rows2['name']?></a></td>
+                      <?php 
+                      $n = $rows2['budget'];
+                        if ($n < 1000000) {
+                          // Anything less than a million
+                          $n_format = number_format($n);
+                      } else if ($n < 1000000000) {
+                          // Anything less than a billion
+                          $n_format = number_format($n / 1000000, 2) . 'M';
+                      } else {
+                          // At least a billion
+                          $n_format = number_format($n / 1000000000, 2) . 'B';
+                      }
+                      ?>
+
+                      <?php 
                         $team_leader = "No User Found";
                           $status = mysqli_query($db,"select fullname from users WHERE id=$rows2[teamleader_id]");
                           if(mysqli_num_rows($status) >= 1){
                             $result4 = $status->fetch_assoc(); 
-                            $team_leader = $result4['stat'];
+                            $team_leader = $result4['fullname'];
                           }
                           else {
                             $team_leader = "No User Found";
                           } 
                           
-                        ?>
+                      ?>
                         <td><?=$team_leader?></td>
+
+                        <td>₱<?=$n_format?></td>
+                        <!-- <td><?=$rows2['description']?></td> -->
+                        
+                        
                         <td>
           <div class="progress">
             <div class="progress-bar" role="progressbar" style="width: <?=$timeline?>%;" aria-valuenow="<?=$timeline?>" aria-valuemin="0" aria-valuemax="100"><?=$timeline?>%</div>
           </div>
                         </td>
-                        <td><?=facebook_time_ago($rows2['date'])?></td>
+                        <td><?=date("d-M-Y H:i", strtotime($rows2['date']))?></td>
                         <!-- <td><?=$rows2['date_started']?></td>
                         <td><?=$rows2['date_end']?></td> -->
                       </tr>
@@ -203,13 +196,14 @@ require("db/conn.php");
                       }
                       else { ?>
                         <tr>
-                        <td colspan="7"><center><b>No Entries Found</b></center></td>
+                        <td colspan="6"><center><b>No Entries Found</b></center></td>
                       </tr>
                       <?php  
                       }
                   ?>
                 </tbody>
               </table>
+              </div>
               <!-- End Table with stripped rows -->
 
             </div>

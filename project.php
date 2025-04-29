@@ -4,11 +4,15 @@
 <?php 
 require("db/conn.php");
     require('head.php');
-    if(empty($_GET['id']) || $_GET['id'] == ""){
+    $project_name_holder = 'Project X';
+    if(empty($_GET['id']) || $_GET['p'] == ""){
       header("Location:pages-error-404.html");
     }
+    else {
+        $project_name_holder = $_GET['p'];
+    }
   ?>
-
+<script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
 <body>
 
   <?php 
@@ -23,43 +27,21 @@ require("db/conn.php");
   <main id="main" class="toggle-sidebar">
 
     <div class="pagetitle">
-      <h1>List of Trainees</h1>
+      <h1><?=$project_name_holder?></h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="home.php">Home</a></li>
-          <li class="breadcrumb-item"><a href="home.php">List</a></li>
-          <li class="breadcrumb-item active">Overview</li>
+          <li class="breadcrumb-item"><a href="home.php">Project</a></li>
+          <li class="breadcrumb-item active"><?=$project_name_holder?></li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
     <section class="section profile">
       <div class="row">
-        <div class="col-xl-4">
+        
 
-          <div class="card">
-            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-              <?php 
-                #Getting Originating Office
-                $query = mysqli_query($db,"select * from list WHERE id=$_GET[id]");
-                $result2 = $query->fetch_assoc();  
-                $x2 = $result2['fullname'];
-              ?>
-              <img src="assets/img/profile.jpg" alt="Profile" class="rounded-circle">
-              <h2><?=$result2['fullname']?></h2>
-              <h3><?=$result2['rank']?></h3>
-              <!-- <div class="social-links mt-2">
-                <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-                <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
-              </div> -->
-            </div>
-          </div>
-
-        </div>
-
-        <div class="col-xl-8">
+        <div class="col-xl-12">
 
           <div class="card">
             <div class="card-body pt-3">
@@ -69,9 +51,9 @@ require("db/conn.php");
                 <li class="nav-item">
                   <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
                 </li>
-
-                <!-- <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+<!--
+                 <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Project</button>
                 </li>
 
                 <li class="nav-item">
@@ -83,83 +65,83 @@ require("db/conn.php");
                 </li> -->
 
               </ul>
-              <div class="tab-content pt-2">
+              <div class="tab-content pt-2"><!-- Start of Bordered Tabs -->
+                <?php 
+                    $query_project = mysqli_query($db,"select * from project WHERE id=$_GET[id]");
+                    if(mysqli_num_rows($query_project) >= 1){
+                        while($result2 = mysqli_fetch_assoc($query_project)){
 
+                        
+                ?>
                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                  <h5 class="card-title">Remarks</h5>
-                  <b><p class="large fst-italic"><?=$result2['remarks']?></p></b>
+                  <h5 class="card-title">Project Title</h5>
+                  <b><h4 class="large fst-italic"><?=$result2['name']?></h4></b>
 
-                  <h5 class="card-title">Trainees' Details</h5>
+                  <h5 class="card-title">Project Details</h5>
 
                   <div class="row">
-                    <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                    <div class="col-lg-9 col-md-8"><?=$result2['rank']?> <?=$result2['fullname']?></div>
+                    <div class="col-lg-3 col-md-4 label ">Project Description</div>
+                    <div class="col-lg-9 col-md-8"><?=$result2['description']?> </div>
                   </div>
 
                   <div class="row">
-                    <div class="col-lg-3 col-md-4 label ">Age</div>
-                    <div class="col-lg-9 col-md-8"><?=$result2['age']?></div>
-                  </div>
-
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Class</div>
+                    <div class="col-lg-3 col-md-4 label ">Team Leader</div>
                     <?php 
-                          $query3 = mysqli_query($db,"select * from rtc_class WHERE id=$result2[rtc]");
-                          $result4 = $query3->fetch_assoc();  
-                          $x4 = $result4['class_name'];
-                        ?>
-                    <div class="col-lg-9 col-md-8"><?=$x4?></div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">RTC</div>
-                    <?php 
-                          $query2 = mysqli_query($db,"select * from rtc WHERE id=$result2[rtc]");
-                          $result3 = $query2->fetch_assoc();  
-                          $x3 = $result3['rtc_short'];
-                        ?>
-                    <div class="col-lg-9 col-md-8"><?=$x3?></div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Date Carried MR</div>
-                    <div class="col-lg-9 col-md-8"><?=$result2['mr']?></div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Resolution</div>
-                    <div class="col-lg-9 col-md-8"><?=$result2['reso']?></div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Date Endorsed</div>
-                    <div class="col-lg-9 col-md-8"><?=$result2['date_endorsed']?></div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Issued Order</div>
-                    <div class="col-lg-9 col-md-8"><?=$result2['so']?></div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Nature of Termination</div>
-                    <?php 
-                      $query2 = mysqli_query($db,"select * from hatol WHERE id=$result2[nature_termi]");
+                        $team_leader = "No User Found";
+                          $status = mysqli_query($db,"select fullname from users WHERE id=$result2[teamleader_id]");
+                          if(mysqli_num_rows($status) >= 1){
+                            $result4 = $status->fetch_assoc(); 
+                            $team_leader = $result4['fullname'];
+                          }
+                          else {
+                            $team_leader = "No User Found";
+                          } 
                           
-                        if($query2){
-                          $result3 = $query2->fetch_assoc();  
-                          $x3 = $result3['stat'];
-                        }else {
-                          echo "Present";
-                        }
-                          
-                    ?>
+                      ?>
+
+                    <div class="col-lg-9 col-md-8"><?=$team_leader?></div>
+                  </div>
+
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Project Budget</div>
+                    <?php 
+                        //   $query3 = mysqli_query($db,"select * from rtc_class WHERE id=$result2[rtc]");
+                        //   $result4 = $query3->fetch_assoc();  
+                        //   $x4 = $result4['class_name'];
+                        ?> 
+                    <div class="col-lg-9 col-md-8">₱<?=number_format($result2['budget'])?>.00</div>
                   </div>
 
                   <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Acad Session / Year</div>
-                    <div class="col-lg-9 col-md-8"><?=$result2['acadsess']?> / <?=$result2['year']?></div>
+                    <div class="col-lg-3 col-md-4 label">Timeline (<?=$result2['timeline']?>%)</div>
+                    
+                    <?php 
+                        //   $query2 = mysqli_query($db,"select * from rtc WHERE id=$result2[rtc]");
+                        //   $result3 = $query2->fetch_assoc();  
+                        //   $x3 = $result3['rtc_short'];
+                        ?>
+                    <div class="col-lg-9 col-md-8">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: <?=$result2['timeline']?>%;" aria-valuenow="<?=$result2['timeline']?>" aria-valuemin="0" aria-valuemax="100"><?=$result2['timeline']?>%</div>
+                        </div>
+                    </div>
                   </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Site Location</div>
+                    <div class="col-lg-9 col-md-8">
+                    📍<?=$result2['location']?>
+                    </div>
+                  </div>
+ 
+                  <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Date Added</div>
+                    <div class="col-lg-9 col-md-8">
+                    📅 <?=date("M d, Y H:i", strtotime($result2['date']))?>
+                    </div>
+                  </div>
+  
 
                 </div>
 
@@ -342,7 +324,14 @@ require("db/conn.php");
                   </form><!-- End Change Password Form -->
 
                 </div>
-
+                <?php 
+                    }
+                    
+                }else {
+                    echo "<script> location.href='pages-error-404.html'; </script>";
+                    die();
+                }
+                ?>
               </div><!-- End Bordered Tabs -->
 
             </div>
@@ -358,6 +347,7 @@ require("db/conn.php");
 
   <?php 
     require('footer.php');
+   
   ?>
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

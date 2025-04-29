@@ -9,7 +9,7 @@ require("db/conn.php");
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Add Employee</title>
+  <title>Add New Project</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -71,28 +71,30 @@ require("db/conn.php");
       else {
       //alert();
       //return;
-          if (confirm("Detail Confirmation: "+$('#rank').val()+" "+$('#fullname').val()+" ?") == true) {
+          if (confirm("Detail Confirmation: "+$('#name').val()+" ?") == true) {
             $('.modal').show();
               var name = $('#name').val();
               var description = $('#description').val();
               var budget = $('#budget').val();
               var teamleader = $('#teamleader').val();
-              var date_started = $('#date_start').val();
-              var date_end = $('#date_end').val();
+              var location = $('#location').val();
+              //var date_started = $('#date_start').val();
+              //var date_end = $('#date_end').val();
               
              var formData = {
                   name_ : name,
                   description_ : description,
                   budget_ : budget,
                   teamleader_ : teamleader,
-                  date_started_ : date_started,
-                  date_end_ : date_end
+                  location_ : location
+                  //date_started_ : date_started,
+                  //date_end_ : date_end
                 };
                 /*alert("til dito");
               return;*/
               $.ajax({
                   type: "POST",
-                  url: "process_register_trainee.php",
+                  url: "process_register_project.php",
                   data: formData,
                   dataType: "json",
                   encode: true,
@@ -126,11 +128,11 @@ require("db/conn.php");
       <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
         <div class="container">
           <div class="row justify-content-center">
-            <div class="col-lg-12 col-md-12 d-flex flex-column align-items-center justify-content-center">
+            <div class="col-lg-9 col-md-9 d-flex flex-column align-items-center justify-content-center">
 
               <div class="d-flex justify-content-center py-4">
                 <a href="home.php" class="logo d-flex align-items-center w-auto">
-                  <!-- <img src="assets/img/logo.png" alt=""> -->
+                  <img src="assets/img/logo.png" alt="">
                   <span class="d-none d-lg-block">🔙 Dashboard</span>
                 </a>
               </div><!-- End Logo -->
@@ -219,15 +221,22 @@ require("db/conn.php");
 
                     <div class="col-12">
                       <label for="yourName" class="form-label">Project Description</label>
-                      <textarea name="description" class="form-control" id="description" placeholder="Project Description..."></textarea>
+                      <textarea name="description" class="form-control" id="description" placeholder="Project Description..." required></textarea>
                       <!-- <input type="text" name="remarks" class="form-control" id="remarks" placeholder="Remarks" required> -->
                       <div class="invalid-feedback">Please, Enter Description</div>
                     </div>
 
                     <div class="col-12">
                       <label for="yourName" class="form-label">Project Budget</label>
-                      <input type="number" name="budget" class="form-control" id="budget" placeholder="Project Budget...">
+                      <input type="number" name="budget" class="form-control" id="budget" placeholder="Project Budget..." required>
                       <div class="invalid-feedback">Please, enter Budget!</div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="yourName" class="form-label">Project Location/Address</label>
+                      <textarea name="location" class="form-control" id="location" placeholder="Project location..." required></textarea>
+                      <!-- <input type="text" name="remarks" class="form-control" id="remarks" placeholder="Remarks" required> -->
+                      <div class="invalid-feedback">Please, Enter location</div>
                     </div>
 
                     <div class="col-12">
@@ -280,7 +289,7 @@ require("db/conn.php");
                     </div>
                     <hr />
                     <div class="col-12">
-                      <button id="submit" name="submit" class="btn btn-primary w-100" type="submit">Add New Trainee</button>
+                      <button id="submit" name="submit" class="btn btn-primary w-100" type="submit">Add New Project</button>
                     </div>
                     <!-- <div class="col-12">
                       <p class="small mb-0">Already have an account? <a href="pages-login.html">Log in</a></p>
@@ -292,6 +301,44 @@ require("db/conn.php");
 
              
             </div>
+
+            <div class="col-lg-3 col-md-3 d-flex flex-column justify-content-center">
+              <?php 
+                $get_project = mysqli_query($db,"select * from project WHERE is_finished != 1");
+                if(mysqli_num_rows($get_project)>= 1){ ?>
+                <div class="card mb-12  w-auto p-1">
+
+                <div class="card-body">
+                  <div class="pt-12 pb-12">
+                  <h4 class="card-title text-center pb-0 fs-4">List of Projects (<?=mysqli_num_rows($get_project)?>)</h4>
+                  <div class="col-md-12">
+                      <table>
+                        <tr>
+                          <th>Project Title</th>
+                        </tr>
+                    <?php 
+                    $loop = 1;
+                      while($rows2 = mysqli_fetch_assoc($get_project)){
+                        ?>
+                            <tr>
+                              <td>[<?=$loop?>] <?=$rows2['name']?></td>
+                            </tr>
+                        <?php
+                        $loop++;
+                      }
+                      ?>
+                  </table>
+                    </div>
+                  </div>
+                  </div>
+                  </div>
+                  <?php
+                }
+                
+              ?>
+            </div>
+
+
           </div>
         </div>
 

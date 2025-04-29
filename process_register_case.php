@@ -2,7 +2,12 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 include('db/conn.php');
-
+function generatePassword($length = 10) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()';
+    return substr(str_shuffle(str_repeat($characters, ceil($length / strlen($characters)))), 0, $length);
+  }
+  
+  $password_holder = generatePassword();
 
 //session_start();
 $data = [];

@@ -20,13 +20,24 @@
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src="assets/img/favicon.png" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">Authorized Admin</span>
+            <span class="d-none d-md-block dropdown-toggle ps-2"><?=$_SESSION['fullname']?></span>
           </a><!-- End Profile Iamge Icon -->
           <!-- <?=strtoupper($_SESSION['email'])?> -->
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>Authorized</h6>
-              <span>Admin</span>
+              <h6><?=$_SESSION['email']?></h6>
+      <?php 
+        $x3 = 'N/A';
+              $query_position = mysqli_query($db,"select * from position WHERE id=$_SESSION[position]");
+                if($query_position){
+                  $result3 = $query_position->fetch_assoc();  
+                  $x3 = $result3['roles'];
+                }else {
+                  $x3 = 'N/A';
+                }
+                  
+            ?>
+              <span><?=$x3?></span>
             </li>
             <li>
               <hr class="dropdown-divider">

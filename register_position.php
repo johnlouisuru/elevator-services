@@ -9,7 +9,7 @@ require("db/conn.php");
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Add User</title>
+  <title>Add Position</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -43,11 +43,6 @@ require("db/conn.php");
 
   <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
   <script>
-    const validateEmail = (email) => {
-    return email.match(
-        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      );
-    };
     $(document).ready(function() {
       $('#myModal').hide();
         $('#submit').prop('disabled',true);
@@ -61,47 +56,41 @@ require("db/conn.php");
         });
       
      $('#submit').on("click", function() {
-      const email_add = $('#email').val();
-      //alert('hehe');
-          //var x = $(this).val();
-          //var y = $('#aa'+x).val();
-          //Value of Trainee ID is x
-          //Value of Case Status is y
-          //alert('value is of TID '+x+' // Value of Case is '+y);
-      
-      if($('#fullname').val() == "" && $('#fullname').val().length <5){
+        var position = $('#position').val();
+        var is_active = $('#is_active').val();
+        // alert(is_active);
+        // return;
+      if($('#position').val() == "" && $('#position').val().length <5){
         var sel2 = $(".toast-body");
             sel2.empty();
-            sel2.append("<p class='alert alert-danger'>Full Name Must Not Be Empty or Less than 5 Characters.</p>");
+            sel2.append("<p class='alert alert-danger'>Position Title Must Not Be Empty or Less than 5 Characters.</p>");
               $('.toast').toast('show');
       }
-      else if(!validateEmail(email_add)){
+      else if(is_active != 'Y' && is_active != 'N'){
         var sel2 = $(".toast-body");
             sel2.empty();
-            sel2.append("<p class='alert alert-danger'>Invalid Email</p>");
+            sel2.append("<p class='alert alert-danger'>Altering the Status wont affect.</p>");
               $('.toast').toast('show');
-              
       }
       else {
       //alert();
       //return;
-          if (confirm("Detail Confirmation: "+$('#fullname').val()+" ?") == true) {
+          if (confirm("Detail Confirmation: "+$('#position').val()+" ?") == true) {
             $('.modal').show();
-              var fullname = $('#fullname').val();
-              var position = $('#position').val();
-              //var email = $('#email').val();
               
-             var formData = {
-                  fullname_ : fullname,
-                  position_ : position,
-                  email_ : email_add
-                };
+              //var email = $('#email').val();
+             var wholePost =  $("#form :input").serializeArray();
+            //  var formData = {
+            //     'data' : wholePost
+            //     //   is_active_ : is_active,
+            //     //   position_ : position
+            //     };
                 /*alert("til dito");
               return;*/
               $.ajax({
                   type: "POST",
-                  url: "process_register_user.php",
-                  data: formData,
+                  url: "process_register_position.php",
+                  data: wholePost,
                   dataType: "json",
                   encode: true,
                 }).done(function(data) {
@@ -206,45 +195,29 @@ require("db/conn.php");
                 <div class="card-body">
 
                   <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4">Add User</h5>
-                    <p class="text-center small">Input all User's Details</p>
+                    <h5 class="card-title text-center pb-0 fs-4">Add Position</h5>
+                    <p class="text-center small">Input all Position's Details</p>
                   </div>
 
-                  <form class="row g-12 needs-validation" novalidate>
+                  <form id='form' class="row g-12 needs-validation" novalidate>
                     
                     <div class="col-12">
-                      <label for="yourName" class="form-label">Full Name</label>
-                      <input type="text" name="fullname" class="form-control" id="fullname" placeholder="First Name M.I Lastname" required>
-                      <div class="invalid-feedback">Please, enter Name!</div>
+                      <label for="yourName" class="form-label">Position Title</label>
+                      <input type="text" name="position" class="form-control" id="position" placeholder="Enter Position Title" required>
+                      <div class="invalid-feedback">Please, enter Position Title!</div>
                     </div>
 
                     <div class="col-12">
-                      <label for="validationDefault04" class="form-label">Position Assigned</label>
-                      <select class="form-select" name="position" id="position" required>
-                        <?php 
-                          $get_position = mysqli_query($db,"select * FROM position WHERE is_active ='Y'");
-                                  if(mysqli_num_rows($get_position)>= 1){ 
-                                    while($row_pos=mysqli_fetch_array($get_position)){
-                                    ?>
-                                      <option value="<?=$row_pos['id']?>"><?=$row_pos['roles']?></option>
-                            <?php
-                              }
-                            }
-                            else { ?>
-                              <option><b>No Entries Found</b></option>
-                            <?php  
-                            }
-                        ?>
+                      <label for="validationDefault04" class="form-label">Status</label>
+                      <select class="form-select" name="is_active" id="is_active">
+                        <option value='Y'>Active</option>
+                        <option value='N'>Inactive</option>
                       </select>
                     </div>
-
                     <div class="col-12">
-                      <label for="yourName" class="form-label">Email Address</label>
-                      <input type="text" name="email" class="form-control" id="email" placeholder="Enter @Email...">
-                      <div class="invalid-feedback">Please, enter Email!</div>
+                    <hr />
                     </div>
-                    
-                  <hr />
+                  
                     <div class="form-check">
                       <input class="form-check-input" type="checkbox" value="" id="verify validationDefault04" onclick="$('#bookit').attr('disabled', !$(this).is(':checked'));" required>
                       <label class="form-check-label" for="flexCheckChecked">
@@ -254,7 +227,7 @@ require("db/conn.php");
                     </div>
                     <hr />
                     <div class="col-12">
-                      <button id="submit" name="submit" class="btn btn-primary w-100">Add New User</button>
+                      <input type='submit' id="submit" name="submit" class="btn btn-primary w-100" value='Add New Position'>
                     </div>
                     <!-- <div class="col-12">
                       <p class="small mb-0">Already have an account? <a href="pages-login.html">Log in</a></p>
