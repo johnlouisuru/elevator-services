@@ -244,7 +244,9 @@ require("db/conn.php");
                       <div class="invalid-feedback">Please, enter Email!</div>
                     </div>
                     
-                  <hr />
+                    <div class="col-12">
+                    <hr />
+                    </div>
                     <div class="form-check">
                       <input class="form-check-input" type="checkbox" value="" id="verify validationDefault04" onclick="$('#bookit').attr('disabled', !$(this).is(':checked'));" required>
                       <label class="form-check-label" for="flexCheckChecked">
